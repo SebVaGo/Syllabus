@@ -1,0 +1,29 @@
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding-top: 2rem;
+}
+
+.fondo {
+    background-color: rgba(113, 56, 77, 0.3);
+    margin: 10%;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.unidad {
+    width: 90%;
+}
+
+.display {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 25px;
+}
+
+.buscador {
+    width: 40%;
+    text-align: center;
+}
