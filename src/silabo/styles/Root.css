@@ -66,16 +66,3 @@ nav a {
     padding: 10px 15px;
     
 }
-
-@media (prefers-color-scheme: light) {
-    :root {
-      color: #1e1e1e;
-      background-color: #ffffff;
-    }
-    a:hover {
-      color: #1e1e1e;
-    }
-    button {
-      background-color: #f9f9f9;
-    }
-  }
