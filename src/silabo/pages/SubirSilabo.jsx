@@ -1,10 +1,9 @@
 import React from 'react';
-import DropSilabo from '../views/DropSilabo';
+import DropSilabo from '../views/DropSilabo/DropSilabo';
 
 export const SubirSilabo = () => {
   return (
     <div>
-      <h2>Subir Silabo</h2>
       <DropSilabo />
     </div>
   );
