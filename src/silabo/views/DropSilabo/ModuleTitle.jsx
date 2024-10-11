@@ -11,7 +11,7 @@ const ModuleTitle = () => {
         textAlign: 'center',
       }}
     >
-      Módulo de Sílabos
+      DropDown
     </Typography>
   );
 };

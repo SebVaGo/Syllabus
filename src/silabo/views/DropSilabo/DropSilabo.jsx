@@ -18,7 +18,6 @@ const SubirSilabo = () => {
         justifyContent: 'center',
         width: '100%',
         height: '100vh',
-        backgroundColor: '#f5f5f5',
         padding: '20px',
       }}
     >

@@ -55,14 +55,10 @@ const FileUploadBox = ({ backendUrl }) => {
         justifyContent: 'center',
         width: '100%',
         height: '100vh',
-        backgroundColor: '#f5f5f5',
         padding: '20px',
       }}
     >
       {/* Título del módulo */}
-      <Typography variant="h3" sx={{ mb: 4, fontWeight: 'bold', color: '#3E5060' }}>
-        Módulo de Sílabos
-      </Typography>
 
       {/* Cuadro de arrastrar y soltar archivos */}
       <Box
