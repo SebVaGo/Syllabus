@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import InformacionG from './InformacionG';
 import BuscadorSil from './BuscadorSil';
-<<<<<<< HEAD
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-=======
 import Sumilla from './Sumilla';
->>>>>>> d9b7cd5aa7d0053b8310786cc578839ccbdb04fc
+import EstrategiaD from './EstrategiaD'; 
+import CompetenciasE from './CompetenciasE' ;
+import ReactQuill from 'react-quill';
+import "react-quill/dist/quill.snow.css";
 import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import '../styles/Formulario.css';
-
 
 export default function Formulario() {
     const [expanded, setExpanded] = useState({
@@ -32,8 +30,6 @@ export default function Formulario() {
         }));
     };
 
-<<<<<<< HEAD
-    const [sumilla, setSumilla] = useState('');
     const [competencias, setCompetencias] = useState([
         { codigo: 'CT7.1', descripcion: 'Descripción de la competencia 1', tipo: 'Técnico', nivel: 'Básico' },
         { codigo: 'CT8.3', descripcion: 'Descripción de la competencia 2', tipo: 'Técnico', nivel: 'Intermedio' }
@@ -50,8 +46,6 @@ export default function Formulario() {
         { unidad: 'Unidad 1', contenidos: 'Contenido de Unidad 1' },
         { unidad: 'Unidad 2', contenidos: 'Contenido de Unidad 2' }
     ]);
-=======
->>>>>>> d9b7cd5aa7d0053b8310786cc578839ccbdb04fc
     const [estrategiaDidactica, setEstrategiaDidactica] = useState('');
     const [evaluacion, setEvaluacion] = useState([
         { resultado: 'RA1', noLogrado: '', suficiente: '', notable: '', sobresaliente: '' }
@@ -339,8 +333,8 @@ export default function Formulario() {
                     </IconButton>
                 </div>
                 {expanded.estrategia && (
-                    <div className="card-content">
-                        <ReactQuill value={estrategiaDidactica} onChange={setEstrategiaDidactica} />
+                    <div className="cuerpo">
+                        <EstrategiaD />
                     </div>
                 )}
             </section>
