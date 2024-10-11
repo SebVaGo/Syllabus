@@ -24,7 +24,6 @@ const SubirSilabo = () => {
     >
       <ModuleTitle />
       <FileUploadBox backendUrl={backendUrl} />
-      <NavigateButton />
     </Box>
   );
 };

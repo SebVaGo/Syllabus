@@ -1,32 +1,33 @@
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const NavigateButton = () => {
+const NavigateButton = ({ route, buttonText, isActive }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/silabo/crear-silabo');
+    navigate(route); // Navegación dinámica basada en la prop `route`
   };
 
   return (
     <Button
-      variant="contained"
+      variant="text" // Cambiamos a "text" para replicar el botón transparente
       sx={{
-        mt: 4,
-        backgroundColor: '#AE675B',
-        color: '#fff',
-        padding: '10px 20px',
-        fontSize: '1rem',
-        textTransform: 'none',
+        width: '100%',
+        color: '#AE675B',
+        backgroundColor: isActive ? 'rgba(174, 103, 91, 0.25)' : 'transparent',
         borderRadius: 2,
+        padding: '0.5rem 1rem',
+        marginBottom: '1rem',
+        textTransform: 'none',
+        fontWeight: isActive ? 'bold' : 'normal',
         transition: 'background-color 0.3s ease',
         '&:hover': {
-          backgroundColor: '#8C5448',
+          backgroundColor: 'rgba(174, 103, 91, 0.25)', // Color al pasar el mouse
         },
       }}
       onClick={handleNavigate}
     >
-      Ir a Crear Sílabo
+      {buttonText}
     </Button>
   );
 };

@@ -6,6 +6,7 @@ const useFileUpload = (backendUrl) => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null); // Mensaje de éxito
 
+  // Función para manejar el cambio de archivo
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -13,6 +14,7 @@ const useFileUpload = (backendUrl) => {
     }
   };
 
+  // Función para subir el archivo
   const uploadFile = async () => {
     if (!selectedFile) {
       setError('No se ha seleccionado ningún archivo');
@@ -39,7 +41,7 @@ const useFileUpload = (backendUrl) => {
       const data = await response.text();
       setSuccessMessage(data); // Guardamos el mensaje de éxito
 
-      setSelectedFile(null); // Limpiamos el archivo seleccionado
+      setSelectedFile(null); // Limpiamos el archivo seleccionado después de subirlo
 
     } catch (error) {
       console.error('Error en la subida del archivo:', error);
@@ -49,7 +51,20 @@ const useFileUpload = (backendUrl) => {
     }
   };
 
-  return { selectedFile, handleFileChange, uploadFile, uploading, error, successMessage };
+  // Función para limpiar el archivo seleccionado
+  const clearSelectedFile = () => {
+    setSelectedFile(null); // Limpiar el archivo seleccionado
+  };
+
+  return {
+    selectedFile,
+    handleFileChange,
+    uploadFile,
+    clearSelectedFile, // Exponemos la función para limpiar el archivo seleccionado
+    uploading,
+    error,
+    successMessage,
+  };
 };
 
 export default useFileUpload;
