@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import InformacionG from './InformacionG';
 import BuscadorSil from './BuscadorSil';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { Box, IconButton } from '@mui/material';
+import Sumilla from './Sumilla';
+import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import '../styles/Formulario.css';
 
+
 export default function Formulario() {
     const [expanded, setExpanded] = useState({
-        informacionGeneral: true,
+        informacionGeneral: false,
         sumilla: false,
         competencias: false,
         logros: false,
@@ -27,7 +27,6 @@ export default function Formulario() {
         }));
     };
 
-    const [sumilla, setSumilla] = useState('');
     const [estrategiaDidactica, setEstrategiaDidactica] = useState('');
 
     return (
@@ -61,8 +60,8 @@ export default function Formulario() {
                     </IconButton>
                 </div>
                 {expanded.sumilla && (
-                    <div className="card-content">
-                        <ReactQuill value={sumilla} onChange={setSumilla} />
+                    <div className="cuerpo">
+                        <Sumilla />
                     </div>
                 )}
             </section>
