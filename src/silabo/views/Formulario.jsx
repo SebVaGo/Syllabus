@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import InformacionG from './InformacionG';
 import BuscadorSil from './BuscadorSil';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Box, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import '../styles/Formulario.css';
+
 export default function Formulario() {
     const [expanded, setExpanded] = useState({
         informacionGeneral: true,
@@ -23,6 +26,9 @@ export default function Formulario() {
             [section]: !prevState[section]
         }));
     };
+
+    const [sumilla, setSumilla] = useState('');
+    const [estrategiaDidactica, setEstrategiaDidactica] = useState('');
 
     return (
         <div className="formulario">
@@ -54,6 +60,11 @@ export default function Formulario() {
                         {expanded.sumilla ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.sumilla && (
+                    <div className="card-content">
+                        <ReactQuill value={sumilla} onChange={setSumilla} />
+                    </div>
+                )}
             </section>
 
             {/* Sección Competencias del Perfil de Egreso */}
@@ -64,6 +75,11 @@ export default function Formulario() {
                         {expanded.competencias ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.competencias && (
+                    <div className="cuerpo">
+                        {/* Aquí puedes incluir el contenido de Competencias */}
+                    </div>
+                )}
             </section>
 
             {/* Sección Logros de Aprendizaje */}
@@ -74,6 +90,11 @@ export default function Formulario() {
                         {expanded.logros ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.logros && (
+                    <div className="cuerpo">
+                        {/* Aquí puedes incluir el contenido de Logros */}
+                    </div>
+                )}
             </section>
 
             {/* Sección Capacidades */}
@@ -84,6 +105,11 @@ export default function Formulario() {
                         {expanded.capacidades ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.capacidades && (
+                    <div className="cuerpo">
+                        {/* Aquí puedes incluir el contenido de Capacidades */}
+                    </div>
+                )}
             </section>
 
             {/* Sección Programación de Contenido */}
@@ -94,6 +120,11 @@ export default function Formulario() {
                         {expanded.programacion ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.programacion && (
+                    <div className="cuerpo">
+                        {/* Aquí puedes incluir el contenido de Programación */}
+                    </div>
+                )}
             </section>
 
             {/* Sección Estrategia Didáctica */}
@@ -104,6 +135,11 @@ export default function Formulario() {
                         {expanded.estrategia ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.estrategia && (
+                    <div className="card-content">
+                        <ReactQuill value={estrategiaDidactica} onChange={setEstrategiaDidactica} />
+                    </div>
+                )}
             </section>
 
             {/* Sección Evaluación del Aprendizaje */}
@@ -114,6 +150,11 @@ export default function Formulario() {
                         {expanded.evaluacion ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                 </div>
+                {expanded.evaluacion && (
+                    <div className="cuerpo">
+                        {/* Aquí puedes incluir el contenido de Evaluación */}
+                    </div>
+                )}
             </section>
         </div>
     );
