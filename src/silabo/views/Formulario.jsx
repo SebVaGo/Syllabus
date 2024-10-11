@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import InformacionG from './InformacionG'; // Importa el componente de información general
+import InformacionG from './InformacionG';
+import BuscadorSil from './BuscadorSil';
 import { Box, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -27,6 +28,7 @@ export default function Formulario() {
         <div className="formulario">
             <section className="fondo buscador">
                 <h2>Busqueda de Silabo</h2>
+                <BuscadorSil />
             </section>
 
             {/* Sección Informacion General */}
