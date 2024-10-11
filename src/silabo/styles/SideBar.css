@@ -26,14 +26,14 @@
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
     transition: background-color 0.3s ease;
-    width: 100%; /* Para que ocupe el ancho completo del contenedor */
+    width: 100%; 
 }
 
 .lateral button:hover {
-    background-color: rgba(174, 103, 91, 0.25); /* Cambia el fondo al hacer hover */
+    background-color: rgba(174, 103, 91, 0.25); 
 }
 
 .lateral button.active {
-    background-color: rgba(174, 103, 91, 0.25); /* Estilo para el botón activo */
-    font-weight: bold; /* Resalta el botón activo */
+    background-color: rgba(174, 103, 91, 0.25);
+    font-weight: bold; 
 }

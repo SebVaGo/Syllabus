@@ -1,11 +1,15 @@
 import React from 'react';
 import Formulario from '../views/Formulario';
+import Sidebar from '../views/Sidebar';
+import '../styles/Root.css';
 
 export const CrearSilabo = () => {
   return (
     <div>
-      <h2>Crear Silabo</h2>
-      <Formulario />
+      <div className='division'>
+        <Sidebar/>
+        <Formulario />
+      </div>
     </div>
   );
 };

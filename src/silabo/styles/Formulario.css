@@ -8,7 +8,6 @@
 
 .fondo {
     background-color: rgba(113, 56, 77, 0.3);
-    margin: 10%;
     border-radius: 20px;
     margin: 5px;
 }
@@ -27,3 +26,4 @@
     width: 40%;
     text-align: center;
 }
+

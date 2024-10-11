@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Grid, TextField } from '@mui/material';
 import '../styles/Formulario.css';
+
 const BuscadorSil = () => {
   return (
     <Container maxWidth="lg" style={{ marginBottom: '20px' }}>
