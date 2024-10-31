@@ -37,8 +37,9 @@ const useFileUpload = (backendUrl) => {
       if (!response.ok) {
         throw new Error('Error al subir el archivo');
       }
-
+      console.log('response', response);
       const data = await response.text();
+      console.log('data', data);
       setSuccessMessage(data); // Guardamos el mensaje de éxito
 
       setSelectedFile(null); // Limpiamos el archivo seleccionado después de subirlo
