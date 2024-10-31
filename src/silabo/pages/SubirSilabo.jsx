@@ -1,11 +1,14 @@
 import React from 'react';
-import DropSilabo from '../views/DropSilabo';
+import DropSilabo from '../views/DropSilabo/DropSilabo';
+import Sidebar from '../views/Sidebar';
 
 export const SubirSilabo = () => {
   return (
     <div>
-      <h2>Subir Silabo</h2>
-      <DropSilabo />
+      <div className='division'>
+        <Sidebar/>
+        <DropSilabo/>
+      </div>
     </div>
   );
 };
