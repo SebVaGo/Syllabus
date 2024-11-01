@@ -13,21 +13,23 @@ export const LoginForm = () => {
   const auth = useSelector((state) => state.authSilabo);
   const navigate = useNavigate();
 
+  // Maneja el inicio de sesión con usuario y contraseña
   const handleLogin = (e) => {
     e.preventDefault();
     dispatch(login(username, password));
   };
 
+  // Redirige a la página de autorización de GitHub
   const handleGithubLogin = () => {
-    // Redirigir directamente a la URL de autorización de GitHub
     window.location.href = 'http://localhost:8080/oauth2/authorization/github';
   };
 
+  // Redirige al usuario a /silabo/crear-silabo si está autenticado
   useEffect(() => {
-    if (auth.token) {
+    if (auth.isAuthenticated) {
       navigate('/silabo/crear-silabo');
     }
-  }, [auth.token, navigate]);
+  }, [auth.isAuthenticated, navigate]);
 
   return (
     <Container className="d-flex justify-content-center align-items-center login-container">

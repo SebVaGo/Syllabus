@@ -10,14 +10,16 @@ export const loginUser = createAsyncThunk(
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Asegura que la cookie se incluya en la solicitud
         body: JSON.stringify({ username, password }),
       });
+      
       if (!response.ok) {
         throw new Error('Error en las credenciales');
       }
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      return data.token;
+
+      // No se necesita guardar el token, solo comprobamos si la respuesta es exitosa
+      return true;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -27,17 +29,16 @@ export const loginUser = createAsyncThunk(
 const userAuthSlice = createSlice({
   name: 'userAuth',
   initialState: {
-    token: null,
+    isAuthenticated: false,
     error: null,
   },
   reducers: {
-    loginSuccess: (state, action) => {
-      state.token = action.payload;
+    loginSuccess: (state) => {
+      state.isAuthenticated = true;
       state.error = null;
     },
     logoutUser: (state) => {
-      state.token = null;
-      localStorage.removeItem('token');
+      state.isAuthenticated = false;
     },
     setError: (state, action) => {
       state.error = action.payload;
@@ -45,12 +46,13 @@ const userAuthSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.token = action.payload;
+      .addCase(loginUser.fulfilled, (state) => {
+        state.isAuthenticated = true;
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.payload;
+        state.isAuthenticated = false;
       });
   },
 });

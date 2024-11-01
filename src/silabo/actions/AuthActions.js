@@ -6,7 +6,7 @@ export const login = (username, password) => async (dispatch) => {
     const response = await fetch('http://localhost:8080/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Esto asegura que las cookies se incluyan en la solicitud
+      credentials: 'include', // Incluye las cookies en la solicitud
       body: JSON.stringify({ username, password }),
     });
 
@@ -15,8 +15,8 @@ export const login = (username, password) => async (dispatch) => {
       throw new Error(errorData.error || 'Error al iniciar sesión');
     }
 
-    const data = await response.json();
-    dispatch(loginSuccess(data.token));
+    // Llama al reducer de loginSuccess para actualizar el estado como autenticado
+    dispatch(loginSuccess()); // No se pasa token, ya que está en la cookie
   } catch (error) {
     dispatch(setError(error.message));
   }
@@ -24,14 +24,16 @@ export const login = (username, password) => async (dispatch) => {
 
 export const performLogout = () => async (dispatch) => {
   try {
-    // Llamar al endpoint de logout en el backend
+    // Llama al endpoint de logout en el backend
     await fetch('http://localhost:8080/api/auth/logout', {
       method: 'POST',
-      credentials: 'include', // Esto asegura que la cookie se incluya
+      credentials: 'include', // Asegura que la cookie se incluya para identificar la sesión
     });
     
+    // Actualiza el estado de logout en Redux
     dispatch(logoutUser());
   } catch (error) {
     console.error("Error al hacer logout:", error);
   }
 };
+
