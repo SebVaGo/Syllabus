@@ -22,6 +22,23 @@ export const login = (username, password) => async (dispatch) => {
   }
 };
 
+export const checkAuth = () => async (dispatch) => {
+  try {
+    const response = await fetch('http://localhost:8080/api/auth/check', {
+      method: 'GET',
+      credentials: 'include', // Asegura que se incluya la cookie en la solicitud
+    });
+
+    if (response.ok) {
+      dispatch(loginSuccess());
+    } else {
+      dispatch(logoutUser()); // Si no está autenticado, se cierra la sesión
+    }
+  } catch (error) {
+    dispatch(logoutUser()); // Cierra la sesión si ocurre un error en la autenticación
+  }
+};
+
 export const performLogout = () => async (dispatch) => {
   try {
     // Llama al endpoint de logout en el backend
@@ -36,4 +53,3 @@ export const performLogout = () => async (dispatch) => {
     console.error("Error al hacer logout:", error);
   }
 };
-
