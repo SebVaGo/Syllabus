@@ -1,35 +1,33 @@
-import React, { useState } from 'react';
+// silabo/pages/LoginForm.js
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../actions/AuthActions';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import '../styles/LoginForm.css';
 
 export const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.authSilabo);
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setError(''); // Limpiar errores anteriores
-
-    if (!username || !password) {
-      setError('Por favor, ingresa tu usuario y contraseña.');
-      return;
-    }
-
-    setIsLoading(true);
-
-    // Simulación de autenticación
-    setTimeout(() => {
-      setIsLoading(false);
-      setError(''); // Borrar el mensaje de error si todo sale bien
-      console.log('Login successful', { username, password });
-    }, 2000);
+    dispatch(login(username, password));
   };
 
   const handleGithubLogin = () => {
+    // Redirigir directamente a la URL de autorización de GitHub
     window.location.href = 'http://localhost:8080/oauth2/authorization/github';
   };
+
+  useEffect(() => {
+    if (auth.token) {
+      navigate('/silabo/crear-silabo');
+    }
+  }, [auth.token, navigate]);
 
   return (
     <Container className="d-flex justify-content-center align-items-center login-container">
@@ -37,7 +35,7 @@ export const LoginForm = () => {
         <Col md={6} lg={4} className="mx-auto">
           <div className="login-card p-4 shadow-sm rounded">
             <h3 className="text-center mb-4">Iniciar Sesión</h3>
-            {error && <div className="alert alert-danger text-center">{error}</div>}
+            {auth.error && <div className="alert alert-danger text-center">{auth.error}</div>}
             <Form onSubmit={handleLogin}>
               <Form.Group controlId="username" className="mb-3">
                 <Form.Label className="form-label">Nombre de Usuario</Form.Label>
@@ -59,8 +57,8 @@ export const LoginForm = () => {
                   required
                 />
               </Form.Group>
-              <Button variant="primary" type="submit" className="w-100 mb-3 login-button" disabled={isLoading}>
-                {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
+              <Button variant="primary" type="submit" className="w-100 mb-3 login-button">
+                Iniciar Sesión
               </Button>
               <div className="text-center text-muted mb-2">o</div>
               <Button variant="dark" onClick={handleGithubLogin} className="w-100 github-button">

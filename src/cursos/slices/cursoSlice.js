@@ -23,3 +23,4 @@ export const cursoSlice = createSlice({
 });
 
 export const { iniciaCargaCursos, cargaCursos, cargaCursoIdActivo } = cursoSlice.actions;
+export default cursoSlice.reducer;

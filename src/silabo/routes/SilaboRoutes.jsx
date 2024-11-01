@@ -11,7 +11,7 @@ export const SilaboRoutes = () => {
         <Route path="crear-silabo" element={<CrearSilabo />} />
         <Route path="subir-silabo" element={<SubirSilabo />} />
         <Route path="login" element={<LoginForm />} />
-        <Route path="*" element={<Navigate to="/crear-silabo" />} />
+        <Route path="*" element={<Navigate to="/silabo/login" />} />
       </Route>
     </Routes>
   );
