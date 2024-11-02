@@ -1,29 +1,28 @@
-import { Box } from '@mui/material';
-import ModuleTitle from './ModuleTitle';
-import FileUploadBox from './FileUploadBox';
-import NavigateButton from '../../utils/NavigateButton';
-import useFetchBackendData from '../../hooks/useFetchBackendData';
+// src/silabo/pages/SubirSilabo.jsx
+import React from 'react';
+import useFileUpload from '../../hooks/useFileUpload';
 
 const SubirSilabo = () => {
-  const backendUrl = 'http://localhost:8080/api/instituciones';
-
-  useFetchBackendData(backendUrl);
+  const { handleFileChange, uploading, uploadError, uploadSuccess, clearMessages } = useFileUpload();
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        height: '100vh',
-        padding: '20px',
-      }}
-    >
-      <ModuleTitle />
-      <FileUploadBox backendUrl={backendUrl} />
-    </Box>
+    <div>
+      <h2>Subir Sílabos</h2>
+      <input type="file" onChange={handleFileChange} disabled={uploading} />
+      {uploading && <p>Subiendo archivo...</p>}
+      {uploadError && (
+        <div style={{ color: 'red' }}>
+          <p>{uploadError}</p>
+          <button onClick={clearMessages}>Cerrar</button>
+        </div>
+      )}
+      {uploadSuccess && (
+        <div style={{ color: 'green' }}>
+          <p>{uploadSuccess}</p>
+          <button onClick={clearMessages}>Cerrar</button>
+        </div>
+      )}
+    </div>
   );
 };
 

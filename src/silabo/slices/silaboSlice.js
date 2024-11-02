@@ -1,43 +1,39 @@
+// src/silabo/slices/silaboSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-export const silaboSlice = createSlice({
-  name: "silabo",
+const silaboSlice = createSlice({
+  name: 'silabo',
   initialState: {
-    estadoCreacion: 'idle',
-    error: null,
-    silaboActivo: null, // Similar al cursoidActivo
-    silabos: [], // Lista de sílabos
-    estaCargandoSilabos: false, // Bandera de carga
+    uploading: false,
+    uploadError: null,
+    uploadSuccess: null,
   },
   reducers: {
-    // Acción para iniciar la carga de sílabos
-    iniciaCargaSilabos: (state) => {
-      state.estaCargandoSilabos = true;
+    setUploading: (state, action) => {
+      console.log("silaboSlice: Cambiando estado de uploading a", action.payload);
+      state.uploading = action.payload;
     },
-    // Acción para cargar la lista de sílabos
-    cargaSilabos: (state, action) => {
-      state.silabos = action.payload.silabos;
-      state.estaCargandoSilabos = false;
+    setUploadError: (state, action) => {
+      console.log("silaboSlice: Error al subir archivo -", action.payload);
+      state.uploadError = action.payload;
     },
-    // Acción para manejar la selección de un sílabo activo
-    cargaSilaboIdActivo: (state, action) => {
-      state.silaboActivo = action.payload.silaboActivo;
+    setUploadSuccess: (state, action) => {
+      console.log("silaboSlice: Archivo subido exitosamente -", action.payload);
+      state.uploadSuccess = action.payload;
     },
-    // Acción para manejar la creación exitosa de un sílabo
-    exitoCreacionSilabo: (state) => {
-      state.estadoCreacion = 'success';
-      state.error = null;
+    clearUploadMessages: (state) => {
+      console.log("silaboSlice: Limpiando mensajes de éxito y error.");
+      state.uploadError = null;
+      state.uploadSuccess = null;
     },
-    // Acción para manejar la falla en la creación de un sílabo
-    falloCreacionSilabo: (state, action) => {
-      state.estadoCreacion = 'failed';
-      state.error = action.payload;
-    }
-  }
+  },
 });
 
-// Exportación de las acciones
-export const { iniciaCargaSilabos, cargaSilabos, cargaSilaboIdActivo, exitoCreacionSilabo, falloCreacionSilabo } = silaboSlice.actions;
+export const {
+  setUploading,
+  setUploadError,
+  setUploadSuccess,
+  clearUploadMessages,
+} = silaboSlice.actions;
 
-// Exportación del reducer para incluirlo en el store
 export default silaboSlice.reducer;

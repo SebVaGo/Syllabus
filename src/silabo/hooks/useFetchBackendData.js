@@ -6,6 +6,7 @@ const useFetchBackendData = (backendUrl) => {
       try {
         const response = await fetch(`${backendUrl}/hola`, {
           method: 'GET',
+          credentials: 'include', // Asegura que las cookies se incluyan en la solicitud
         });
         
         if (!response.ok) {

@@ -1,70 +1,32 @@
-import { useState } from 'react';
+// src/silabo/hooks/useFileUpload.js
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadFileToS3 } from '../actions/SilaboCargaThunks';
+import { clearUploadMessages } from '../slices/silaboSlice';
 
-const useFileUpload = (backendUrl) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null); // Mensaje de éxito
-
-  // Función para manejar el cambio de archivo
+const useFileUpload = () => {
+  const dispatch = useDispatch();
+  const { uploading, uploadError, uploadSuccess } = useSelector((state) => state.silabo);
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    console.log("useFileUpload: Archivo seleccionado -", file);
+
     if (file) {
-      setSelectedFile(file);
+      dispatch(uploadFileToS3(file));
     }
   };
 
-  // Función para subir el archivo
-  const uploadFile = async () => {
-    if (!selectedFile) {
-      setError('No se ha seleccionado ningún archivo');
-      return;
-    }
-
-    setUploading(true);
-    setError(null);
-    setSuccessMessage(null);
-
-    const formData = new FormData();
-    formData.append('file', selectedFile); // Empaquetamos el archivo para enviar al backend
-
-    try {
-      const response = await fetch(`${backendUrl}/subir`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al subir el archivo');
-      }
-      console.log('response', response);
-      const data = await response.text();
-      console.log('data', data);
-      setSuccessMessage(data); // Guardamos el mensaje de éxito
-
-      setSelectedFile(null); // Limpiamos el archivo seleccionado después de subirlo
-
-    } catch (error) {
-      console.error('Error en la subida del archivo:', error);
-      setError('Hubo un problema al subir el archivo');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  // Función para limpiar el archivo seleccionado
-  const clearSelectedFile = () => {
-    setSelectedFile(null); // Limpiar el archivo seleccionado
+  const clearMessages = () => {
+    console.log("useFileUpload: Limpiando mensajes de estado...");
+    dispatch(clearUploadMessages());
   };
 
   return {
-    selectedFile,
     handleFileChange,
-    uploadFile,
-    clearSelectedFile, // Exponemos la función para limpiar el archivo seleccionado
     uploading,
-    error,
-    successMessage,
+    uploadError,
+    uploadSuccess,
+    clearMessages,
   };
 };
 

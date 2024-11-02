@@ -1,35 +1,31 @@
-// silabo/actions/authActions.js
+import axios from 'axios';
 import { loginSuccess, logoutUser, setError } from '../slices/userAuthSlice';
 
+// Acción para iniciar sesión
 export const login = (username, password) => async (dispatch) => {
   try {
-    const response = await fetch('http://localhost:8080/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Incluye las cookies en la solicitud
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Error al iniciar sesión');
-    }
+    const response = await axios.post(
+      'http://localhost:8080/api/auth/login',
+      { username, password },
+      { withCredentials: true } // Incluye las cookies en la solicitud
+    );
 
     // Llama al reducer de loginSuccess para actualizar el estado como autenticado
-    dispatch(loginSuccess()); // No se pasa token, ya que está en la cookie
+    dispatch(loginSuccess()); // No se pasa el token, ya que está en la cookie
   } catch (error) {
-    dispatch(setError(error.message));
+    const errorMessage = error.response?.data?.error || 'Error al iniciar sesión';
+    dispatch(setError(errorMessage));
   }
 };
 
+// Acción para verificar la autenticación
 export const checkAuth = () => async (dispatch) => {
   try {
-    const response = await fetch('http://localhost:8080/api/auth/check', {
-      method: 'GET',
-      credentials: 'include', // Asegura que se incluya la cookie en la solicitud
+    const response = await axios.get('http://localhost:8080/api/auth/check', {
+      withCredentials: true, // Asegura que se incluya la cookie en la solicitud
     });
 
-    if (response.ok) {
+    if (response.status === 200) {
       dispatch(loginSuccess());
     } else {
       dispatch(logoutUser()); // Si no está autenticado, se cierra la sesión
@@ -39,12 +35,11 @@ export const checkAuth = () => async (dispatch) => {
   }
 };
 
+// Acción para cerrar sesión
 export const performLogout = () => async (dispatch) => {
   try {
-    // Llama al endpoint de logout en el backend
-    await fetch('http://localhost:8080/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include', // Asegura que la cookie se incluya para identificar la sesión
+    await axios.post('http://localhost:8080/api/auth/logout', {}, {
+      withCredentials: true, // Asegura que la cookie se incluya para identificar la sesión
     });
     
     // Actualiza el estado de logout en Redux
