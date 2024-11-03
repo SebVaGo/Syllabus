@@ -13,13 +13,13 @@ export const uploadFileToS3 = (file) => async (dispatch) => {
   formData.append('file', file);
 
   try {
-    console.log("SilaboThunks: Enviando solicitud a http://localhost:8080/api/s3/upload");
+    console.log("SilaboThunks: Enviando solicitud a http://localhost:8080/api/files/upload/local");
 
     // Usando axios para realizar la solicitud
-    const response = await axios.post("http://localhost:8080/api/s3/upload", formData, {
-      withCredentials: true, // Incluye cookies para autenticación
+    const response = await axios.post("http://localhost:8080/api/files/upload/local", formData, {
+      withCredentials: true,
       headers: {
-        'Content-Type': 'multipart/form-data' // Axios detecta automáticamente, pero es útil especificarlo
+        'Content-Type': 'multipart/form-data'
       }
     });
 
@@ -27,7 +27,14 @@ export const uploadFileToS3 = (file) => async (dispatch) => {
     dispatch(setUploadSuccess(response.data));
   } catch (error) {
     console.error('SilaboThunks: Error en la subida del archivo:', error);
-    dispatch(setUploadError('Hubo un problema al subir el archivo'));
+
+    // Verifica si hay un mensaje de error específico en error.response.data
+    if (error.response && error.response.data) {
+      console.log("Mensaje de error específico del servidor:", error.response.data);
+      dispatch(setUploadError(error.response.data)); // Muestra el mensaje específico
+    } else {
+      dispatch(setUploadError('Hubo un problema al subir el archivo')); // Mensaje genérico
+    }
   } finally {
     dispatch(setUploading(false));
     console.log("SilaboThunks: Carga de archivo finalizada.");

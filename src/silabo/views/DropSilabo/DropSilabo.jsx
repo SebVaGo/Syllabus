@@ -1,7 +1,6 @@
-// src/silabo/pages/SubirSilabo.jsx
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography, Button, IconButton } from '@mui/material';
+import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
 import { CloudUploadOutlined, DeleteOutline } from '@mui/icons-material';
 import { uploadFileToS3 } from '../../actions/SilaboCargaThunks';
 import { clearUploadMessages } from '../../slices/silaboSlice';
@@ -14,28 +13,55 @@ const SubirSilabo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("Subiendo archivo...");
 
+  // Array de mensajes que se muestran secuencialmente durante el proceso
+  const messages = [
+    "Esto puede tardar unos segundos...",
+    "Ya casi está listo...",
+    "El proceso demora alrededor de 20 segundos...",
+    "Gracias por tu paciencia, estamos casi terminando..."
+  ];
+  
   useEffect(() => {
+    let messageInterval;
+
+    if (uploading || analyzing) {
+      let messageIndex = 0;
+      // Configura un intervalo para cambiar el mensaje cada 5 segundos
+      messageInterval = setInterval(() => {
+        setStatusMessage(messages[messageIndex]);
+        messageIndex = (messageIndex + 1) % messages.length; // Loop de mensajes
+      }, 5000); // Cambia el mensaje cada 5 segundos
+    }
+
     if (uploadSuccess || uploadError) {
       setOpenModal(true);
+      setAnalyzing(false); // Detener análisis cuando haya éxito o error
+      clearInterval(messageInterval); // Detener el intervalo de mensajes
     }
-  }, [uploadSuccess, uploadError]);
+
+    return () => clearInterval(messageInterval); // Limpiar intervalo al desmontar el componente o finalizar el proceso
+  }, [uploading, analyzing, uploadSuccess, uploadError]);
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    dispatch(clearUploadMessages()); // Limpiar mensajes después de cerrar el modal
+    dispatch(clearUploadMessages());
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file); // Guardar el archivo en el estado local
+      setSelectedFile(file);
     }
   };
 
   const handleUploadFile = () => {
     if (selectedFile) {
-      dispatch(uploadFileToS3(selectedFile)); // Despachar acción para subir el archivo
+      setAnalyzing(true);
+      setStatusMessage("Subiendo archivo..."); // Mensaje inicial
+      dispatch(uploadFileToS3(selectedFile));
     }
   };
 
@@ -57,13 +83,13 @@ const SubirSilabo = () => {
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setSelectedFile(e.dataTransfer.files[0]); // Guardar archivo en el estado local
+      setSelectedFile(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
     }
   };
 
   const handleDeleteFile = () => {
-    setSelectedFile(null); // Limpiar el archivo seleccionado
+    setSelectedFile(null);
   };
 
   return (
@@ -112,7 +138,7 @@ const SubirSilabo = () => {
           accept=".doc, .docx"
           style={{ display: 'none' }}
           id="file-input"
-          onChange={handleFileChange} // Guardar el archivo en el estado sin subirlo
+          onChange={handleFileChange}
         />
         <label htmlFor="file-input">
           <Button variant="outlined" component="span" sx={{ mt: 2, color: '#AE675B', borderColor: '#AE675B' }}>
@@ -140,17 +166,26 @@ const SubirSilabo = () => {
           transition: 'background-color 0.3s ease',
           '&:hover': { backgroundColor: '#8C5448' },
         }}
-        onClick={handleUploadFile} // Subir archivo al hacer clic
-        disabled={uploading || !selectedFile} // Deshabilitar si no hay archivo seleccionado o si está subiendo
+        onClick={handleUploadFile}
+        disabled={uploading || !selectedFile}
       >
-        {uploading ? 'Subiendo...' : 'Subir Archivo'}
+        {uploading ? 'Subiendo...' : analyzing ? 'Analizando...' : 'Subir Archivo'}
       </Button>
+
+      {(uploading || analyzing) && (
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
+          <CircularProgress size={24} sx={{ color: '#AE675B', mr: 1 }} />
+          <Typography variant="body1" sx={{ color: '#AE675B' }}>
+            {statusMessage}
+          </Typography>
+        </Box>
+      )}
 
       <CustomModal
         open={openModal}
         handleClose={handleCloseModal}
         title={uploadSuccess ? '¡Éxito!' : 'Error'}
-        message={uploadSuccess ? uploadSuccess : uploadError}
+        message={uploadSuccess || uploadError}
       />
     </Box>
   );

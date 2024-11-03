@@ -1,4 +1,3 @@
-// silabo/slices/userAuthSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const loginUser = createAsyncThunk(
@@ -15,13 +14,16 @@ export const loginUser = createAsyncThunk(
       });
       
       if (!response.ok) {
-        throw new Error('Error en las credenciales');
+        // Captura el error del servidor si la respuesta no es exitosa
+        const errorData = await response.json();
+        const errorMessage = errorData.error || 'Error en las credenciales';
+        throw new Error(errorMessage);
       }
 
-      // No se necesita guardar el token, solo comprobamos si la respuesta es exitosa
+      // Si la respuesta es exitosa, autenticamos al usuario
       return true;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message); // Rechazamos la promesa con el mensaje de error
     }
   }
 );
@@ -43,6 +45,9 @@ const userAuthSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    clearError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -51,11 +56,11 @@ const userAuthSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action.payload; // Almacena el mensaje de error para mostrarlo en el modal
         state.isAuthenticated = false;
       });
   },
 });
 
-export const { loginSuccess, logoutUser, setError } = userAuthSlice.actions;
+export const { loginSuccess, logoutUser, setError, clearError } = userAuthSlice.actions;
 export default userAuthSlice.reducer;
