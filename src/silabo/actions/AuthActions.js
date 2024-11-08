@@ -47,6 +47,8 @@ export const performLogout = () => async (dispatch) => {
 
     dispatch(logoutUser());
     dispatch(clearError()); // Limpia cualquier error anterior
+    dispatch(clearData()); // Limpia los datos del curso al cerrar sesión
+
   } catch (error) {
     const errorMessage = error.response?.data?.error || 'Error al cerrar sesión. Inténtalo de nuevo.';
     dispatch(setError(errorMessage));

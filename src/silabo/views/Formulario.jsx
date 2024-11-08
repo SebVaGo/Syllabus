@@ -12,6 +12,9 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import '../styles/Formulario.css';
 
 export default function Formulario() {
+
+    const [cursoData, setCursoData] = useState(null); // Estado para almacenar los datos del curso
+
     const [expanded, setExpanded] = useState({
         informacionGeneral: false,
         sumilla: false,
@@ -51,27 +54,42 @@ export default function Formulario() {
         { resultado: 'RA1', noLogrado: '', suficiente: '', notable: '', sobresaliente: '' }
     ]);
 
-    return (
-        <div className="formulario">
-            <section className="fondo buscador">
-                <h2>Busqueda de Silabo</h2>
-                <BuscadorSil />
-            </section>
 
-            {/* Sección Informacion General */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Información General</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('informacionGeneral')}>
-                        {expanded.informacionGeneral ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.informacionGeneral && (
-                    <div className="cuerpo">
-                        <InformacionG />
+        return (
+            <div className="formulario">
+                <section className="fondo buscador">
+                    <h2>Busqueda de Silabo</h2>
+                    {/* Pasar setCursoData a BuscadorSil para actualizar el estado con los datos del curso */}
+                    <BuscadorSil setCursoData={setCursoData} />
+                </section>
+    
+                {/* Sección Informacion General */}
+                <section className="fondo unidad">
+                    <div className="display">
+                        <h2>Información General</h2>
+                        <IconButton color="action" onClick={() => toggleExpand('informacionGeneral')}>
+                            {expanded.informacionGeneral ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </IconButton>
                     </div>
-                )}
-            </section>
+                    {expanded.informacionGeneral && (
+                        <div className="cuerpo">
+                            {/* Pasar los datos del curso a InformacionG */}
+                            <InformacionG
+                                codigo={cursoData?.codigo}
+                                nombre={cursoData?.nombre}
+                                creditos={cursoData?.numCreditos}
+                                horasSemanales={cursoData?.numHorasTeoria}
+                                modalidad={cursoData?.modalidad}
+                                tipo={cursoData?.tipo}
+                                ciclo={cursoData?.ciclo}
+                                docentes={cursoData?.docentes}
+                                areaEstudios={cursoData?.areaEstudios}
+                                semestreAcademico={cursoData?.semestreAcademico}
+                                prerequisitos={cursoData?.prerequisitos}
+                            />
+                        </div>
+                    )}
+                </section>
 
             {/* Sección Sumilla */}
             <section className="fondo unidad">

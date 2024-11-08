@@ -4,6 +4,7 @@ import { authSlice } from '../../seguridad/slices';
 import authSliceSilabo from '../../silabo/slices/userAuthSlice';
 import cursoSlice from '../../cursos/slices/cursoSlice';
 import silaboSlice from '../../silabo/slices/silaboSlice';
+import cargarDetallesCursoSlice from '../../silabo/slices/cargarDetallesCursoSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     authSilabo: authSliceSilabo,
     curso: cursoSlice,
     silabo: silaboSlice,
+    cargarDetallesCurso: cargarDetallesCursoSlice,
   },
 });
 
