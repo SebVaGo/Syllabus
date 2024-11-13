@@ -1,0 +1,21 @@
+.quill-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    padding: 1rem;
+    background-color: rgba(113, 56, 77, 0.2); /* color de fondo similar a la sección */
+    border-radius: 20px;
+}
+
+.ql-toolbar {
+    background-color: rgba(113, 56, 77, 0.3); /* color de fondo para la barra de herramientas */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.ql-container {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

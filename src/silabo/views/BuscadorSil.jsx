@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cargarDetallesCurso } from '../actions/CargaDetalleCursoThunk';
 import { Button, Container, Grid, TextField, Radio, RadioGroup, FormControlLabel, FormLabel } from '@mui/material';
 
-const BuscadorSil = ({ setCursoData }) => {
+const BuscadorSil = ({ setCursoData, setErrorMessage }) => {
   const [searchType, setSearchType] = useState('codigo');
   const [codigo, setCodigo] = useState('');
   const [nombre, setNombre] = useState('');
@@ -21,11 +21,16 @@ const BuscadorSil = ({ setCursoData }) => {
 
       if (result) {
         setCursoData(result); // Actualiza los datos del curso en Formulario
+        setErrorMessage(null); // Limpia el mensaje de error si se encontró un resultado
       } else {
-        console.error("No se recibió un resultado válido:", result);
+        setErrorMessage("No se encontraron resultados"); // Muestra mensaje de error si no se encuentra nada
+        setCursoData(null); // Limpia los datos del curso
       }
     } catch (error) {
       console.error("Error en la solicitud:", error);
+      // Captura y muestra el mensaje específico del backend o un mensaje por defecto
+      setErrorMessage(error.response?.data?.message || "Error en la solicitud"); 
+      setCursoData(null);
     }
   };
 

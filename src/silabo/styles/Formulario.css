@@ -20,6 +20,7 @@
     display: flex;
     justify-content: space-between;
     padding-left: 25px;
+    cursor: pointer; /* Hace que el cursor cambie al pasar sobre la sección */
 }
 
 .buscador {

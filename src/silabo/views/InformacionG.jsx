@@ -1,143 +1,84 @@
-import React from 'react';
-import { Container, Grid, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Grid, TextField, Button } from '@mui/material';
 import '../styles/Formulario.css';
 
-const InformacionG = ({ codigo, nombre, creditos, horasSemanales, modalidad, tipo, ciclo, docentes, areaEstudios, semestreAcademico, prerequisitos }) => {
+// Componente reutilizable para cada campo de información
+const InfoField = ({ id, label, value, onChange }) => (
+  <TextField
+    id={id}
+    label={label}
+    variant="filled"
+    size="small"
+    value={value || ''}
+    name={id}
+    onChange={onChange}
+    sx={{ mb: 2, backgroundColor: 'white', width: '100%' }}
+  />
+);
+
+const InformacionG = ({ 
+  codigo, nombre, creditos, horasSemanales, modalidad, tipo, 
+  ciclo, docentes, areaEstudios, semestreAcademico, prerequisitos 
+}) => {
+  // Estado para los valores actuales y los valores originales (para restablecer)
+  const [cursoData, setCursoData] = useState({
+    codigo,
+    nombre,
+    creditos,
+    horasSemanales,
+    modalidad,
+    tipo,
+    ciclo,
+    docentes,
+    areaEstudios,
+    semestreAcademico,
+    prerequisitos,
+  });
+  const [initialData] = useState(cursoData);  // Guardar los valores originales para restablecerlos
+
+  // Actualiza el estado `cursoData` cuando el usuario edita un campo
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCursoData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Restablece `cursoData` a sus valores iniciales
+  const handleReset = () => {
+    setCursoData(initialData);
+  };
+
   return (
-    <Container sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',  
-    }}>
+    <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={4} >
-          <TextField 
-            id="codigo" 
-            label="Código" 
-            variant="filled" 
-            size="small" 
-            value={codigo || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="nombre" 
-            label="Nombre" 
-            variant="filled" 
-            size="small" 
-            value={nombre || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="creditos" 
-            label="Créditos" 
-            variant="filled" 
-            size="small" 
-            value={creditos || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="tipo-asignatura" 
-            label="Tipo de Asignatura" 
-            variant="filled" 
-            size="small" 
-            value={tipo || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="area-estudios" 
-            label="Área de Estudios" 
-            variant="filled" 
-            size="small" 
-            value={areaEstudios || ''} 
-            sx={{ mb: 2 ,backgroundColor: 'white',width: '100%'}} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4} >
-          <TextField 
-            id="horas-semanales" 
-            label="Horas Semanales" 
-            variant="filled" 
-            size="small" 
-            value={horasSemanales || ''} 
-            sx={{ mb: 2,backgroundColor: 'white' ,width: '100%'}} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="ciclo" 
-            label="Ciclo" 
-            variant="filled" 
-            size="small" 
-            value={ciclo || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="semestre-academico" 
-            label="Semestre Académico" 
-            variant="filled" 
-            size="small" 
-            value={semestreAcademico || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
+        <Grid item xs={12} sm={4}>
+          <InfoField id="codigo" label="Código" value={cursoData.codigo} onChange={handleChange} />
+          <InfoField id="nombre" label="Nombre" value={cursoData.nombre} onChange={handleChange} />
+          <InfoField id="creditos" label="Créditos" value={cursoData.creditos} onChange={handleChange} />
+          <InfoField id="tipo" label="Tipo de Asignatura" value={cursoData.tipo} onChange={handleChange} />
+          <InfoField id="areaEstudios" label="Área de Estudios" value={cursoData.areaEstudios} onChange={handleChange} />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <TextField 
-            id="modalidad" 
-            label="Modalidad" 
-            variant="filled" 
-            size="small" 
-            value={modalidad || ''} 
-            sx={{ mb: 2,backgroundColor: 'white' ,width: '100%'}} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="docentes" 
-            label="Docentes" 
-            variant="filled" 
-            size="small" 
-            value={docentes || ''} 
-            sx={{ mb: 2,backgroundColor: 'white',width: '100%' }} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField 
-            id="prerequisitos" 
-            label="Prerrequisitos" 
-            variant="filled" 
-            size="small" 
-            value={prerequisitos || ''} 
-            sx={{ mb: 2 ,backgroundColor: 'white',width: '100%'}} 
-            InputProps={{
-              readOnly: true,
-            }}
-          />
+          <InfoField id="horasSemanales" label="Horas Semanales" value={cursoData.horasSemanales} onChange={handleChange} />
+          <InfoField id="ciclo" label="Ciclo" value={cursoData.ciclo} onChange={handleChange} />
+          <InfoField id="semestreAcademico" label="Semestre Académico" value={cursoData.semestreAcademico} onChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <InfoField id="modalidad" label="Modalidad" value={cursoData.modalidad} onChange={handleChange} />
+          <InfoField id="docentes" label="Docentes" value={cursoData.docentes} onChange={handleChange} />
+          <InfoField id="prerequisitos" label="Prerrequisitos" value={cursoData.prerequisitos} onChange={handleChange} />
         </Grid>
       </Grid>
+      
+      <Button onClick={handleReset} sx={{ mt: 2 }} color="secondary" variant="outlined">
+        Restablecer
+      </Button>
+
+      <Button onClick={() => console.log('Guardar cambios:', cursoData)} sx={{ mt: 2, ml: 2 }} color="primary" variant="contained">
+        Guardar
+      </Button>
     </Container>
   );
 };

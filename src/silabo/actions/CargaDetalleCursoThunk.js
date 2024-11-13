@@ -21,10 +21,14 @@ export const cargarDetallesCurso = (codigo, nombre) => async (dispatch) => {
       }
     );
 
+    if (!response.data || Object.keys(response.data).length === 0) {
+      throw new Error("No se encontraron resultados");
+    }
+
     dispatch(setUploadSuccess(response.data));
     return response.data; // Devuelve los datos para ser usados en el componente
   } catch (error) {
-    const errorMessage = error.response?.data || 'Error al cargar los detalles del curso.';
+    const errorMessage = error.response?.data?.message || 'Error al cargar los detalles del curso.';
     dispatch(setUploadError(errorMessage));
     throw error; // Lanza el error para ser capturado en el componente
   } finally {

@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InformacionG from './InformacionG';
 import BuscadorSil from './BuscadorSil';
-import Sumilla from './Sumilla';
+import CollapsibleSection from '../utils/CollapsibleSection';
+import SumillaSection from './Sumilla/SumillaSection';
+import Sumilla from './Sumilla/Sumilla';
+import CustomModal from '../utils/CustomModal';
 import EstrategiaD from './EstrategiaD'; 
-import CompetenciasE from './CompetenciasE' ;
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
 import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import CompetenciasSection from './CompetenciasSection';
 import '../styles/Formulario.css';
 
 export default function Formulario() {
 
     const [cursoData, setCursoData] = useState(null); // Estado para almacenar los datos del curso
+    const [errorMessage, setErrorMessage] = useState(null); // Estado para el mensaje de error
+    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
+
+    const handleModalClose = () => setIsModalOpen(false);
+
+    useEffect(() => {
+        if (errorMessage) {
+            setIsModalOpen(true); // Abre el modal cuando hay un mensaje de error
+        }
+    }, [errorMessage]);
 
     const [expanded, setExpanded] = useState({
         informacionGeneral: false,
@@ -56,129 +69,60 @@ export default function Formulario() {
 
 
         return (
-            <div className="formulario">
-                <section className="fondo buscador">
-                    <h2>Busqueda de Silabo</h2>
-                    {/* Pasar setCursoData a BuscadorSil para actualizar el estado con los datos del curso */}
-                    <BuscadorSil setCursoData={setCursoData} />
-                </section>
-    
-                {/* Sección Informacion General */}
-                <section className="fondo unidad">
-                    <div className="display">
-                        <h2>Información General</h2>
-                        <IconButton color="action" onClick={() => toggleExpand('informacionGeneral')}>
-                            {expanded.informacionGeneral ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </IconButton>
-                    </div>
-                    {expanded.informacionGeneral && (
-                        <div className="cuerpo">
-                            {/* Pasar los datos del curso a InformacionG */}
-                            <InformacionG
-                                codigo={cursoData?.codigo}
-                                nombre={cursoData?.nombre}
-                                creditos={cursoData?.numCreditos}
-                                horasSemanales={cursoData?.numHorasTeoria}
-                                modalidad={cursoData?.modalidad}
-                                tipo={cursoData?.tipo}
-                                ciclo={cursoData?.ciclo}
-                                docentes={cursoData?.docentes}
-                                areaEstudios={cursoData?.areaEstudios}
-                                semestreAcademico={cursoData?.semestreAcademico}
-                                prerequisitos={cursoData?.prerequisitos}
-                            />
-                        </div>
-                    )}
-                </section>
+<div className="formulario">
+    {/* Modal para mensajes de error */}
+    <CustomModal 
+        open={isModalOpen} 
+        handleClose={() => {
+            handleModalClose();
+            setErrorMessage(null); // Limpia el mensaje de error cuando se cierra el modal
+        }}
+        message={errorMessage} 
+        title="Error de Búsqueda" 
+    />
+    <section className="fondo buscador">
+        <h2>Busqueda de Silabo</h2>
+        {/* Pasar setCursoData y setErrorMessage a BuscadorSil para actualizar el estado */}
+        <BuscadorSil setCursoData={setCursoData} setErrorMessage={setErrorMessage} />
+    </section>
 
-            {/* Sección Sumilla */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Sumilla</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('sumilla')}>
-                        {expanded.sumilla ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.sumilla && (
-                    <div className="cuerpo">
-                        <Sumilla />
-                    </div>
-                )}
-            </section>
+            <CollapsibleSection
+            title="Información General"
+            expanded={expanded.informacionGeneral}
+            toggleExpand={() => toggleExpand('informacionGeneral')}
+            >
+            <InformacionG
+                codigo={cursoData?.codigo || ''}
+                nombre={cursoData?.nombre || ''}
+                creditos={cursoData?.numCreditos || ''}
+                horasSemanales={`${cursoData?.numHorasTeoria ?? ''} Teoría, ${cursoData?.numHorasPractica ?? ''} Práctica, ${cursoData?.numHorasLaboratorio ?? ''} Laboratorio`}
+                modalidad={cursoData?.modalidad || ''}
+                tipo={cursoData?.tipo || ''}
+                ciclo={cursoData?.ciclo || ''}
+                docentes={cursoData?.docentes || ''}
+                areaEstudios={cursoData?.areaEstudios || ''}
+                semestreAcademico={cursoData?.descripcion || ''}
+                prerequisitos={cursoData?.prerequisitos || ''}
+                />
+            </CollapsibleSection>
+            <CollapsibleSection
+                title="Sumilla"
+                expanded={expanded.sumilla}
+                toggleExpand={() => toggleExpand('sumilla')}
+            >
+                <Sumilla />
+            </CollapsibleSection>
 
-            {/* Sección Competencias del Perfil de Egreso */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Competencias del Perfil de Egreso</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('competencias')}>
-                        {expanded.competencias ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.competencias && (
-                    <div className="cuerpo">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>Nivel</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {competencias.map((comp, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={comp.codigo}
-                                                onChange={(e) => {
-                                                    const newCompetencias = [...competencias];
-                                                    newCompetencias[index].codigo = e.target.value;
-                                                    setCompetencias(newCompetencias);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={comp.descripcion}
-                                                onChange={(e) => {
-                                                    const newCompetencias = [...competencias];
-                                                    newCompetencias[index].descripcion = e.target.value;
-                                                    setCompetencias(newCompetencias);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={comp.tipo}
-                                                onChange={(e) => {
-                                                    const newCompetencias = [...competencias];
-                                                    newCompetencias[index].tipo = e.target.value;
-                                                    setCompetencias(newCompetencias);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={comp.nivel}
-                                                onChange={(e) => {
-                                                    const newCompetencias = [...competencias];
-                                                    newCompetencias[index].nivel = e.target.value;
-                                                    setCompetencias(newCompetencias);
-                                                }}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </section>
+            <CollapsibleSection
+                title="Competencias del Perfil de Egreso"
+                expanded={expanded.competencias}
+                toggleExpand={() => toggleExpand('competencias')}
+            >
+            <CompetenciasSection
+              competencias={cursoData?.competencias || []}
+              setCompetencias={() => {}}
+            />
+            </CollapsibleSection>
 
             {/* Sección Logros de Aprendizaje */}
             <section className="fondo unidad">
