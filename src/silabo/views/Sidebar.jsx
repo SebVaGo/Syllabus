@@ -2,13 +2,20 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { performLogout } from '../actions/AuthActions';
 import NavigateButton from '../utils/NavigateButton'; // Importamos el botón reutilizable
+import { useNavigate } from 'react-router-dom';
+
 import '../styles/Sidebar.css';
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(performLogout());
+    try{
+      dispatch(performLogout());
+      navigate('/silabo/login'); 
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
   return (

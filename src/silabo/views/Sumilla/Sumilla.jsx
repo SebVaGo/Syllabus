@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../styles/Formulario.css';
-import '../../styles/Sumilla.css'; // Importa aquí tu nuevo archivo CSS
+import '../../styles/Sumilla.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -23,12 +23,14 @@ const formats = [
   'align',
 ];
 
-export const Sumilla = () => {
+const Sumilla = ({ value }) => {
   return (
     <div className="quill-container">
       <ReactQuill
         modules={modules}
         formats={formats}
+        value={value} // Muestra el valor de la sumilla recibido como prop
+        readOnly={true} // Establece el modo solo lectura, puedes cambiar esto si deseas edición
         placeholder="Escribe aquí la sumilla del curso..."
         style={{
           backgroundColor: 'white',

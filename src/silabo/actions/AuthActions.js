@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { loginSuccess, logoutUser, setError, clearError } from '../slices/userAuthSlice';
+import { useNavigate } from 'react-router-dom';
 
 // Acción para iniciar sesión
 export const login = (username, password) => async (dispatch) => {
@@ -48,6 +49,8 @@ export const performLogout = () => async (dispatch) => {
     dispatch(logoutUser());
     dispatch(clearError()); // Limpia cualquier error anterior
     dispatch(clearData()); // Limpia los datos del curso al cerrar sesión
+    navigate('/silabo/login'); 
+
 
   } catch (error) {
     const errorMessage = error.response?.data?.error || 'Error al cerrar sesión. Inténtalo de nuevo.';

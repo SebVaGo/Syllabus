@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import InformacionG from './InformacionG';
 import BuscadorSil from './BuscadorSil';
 import CollapsibleSection from '../utils/CollapsibleSection';
-import SumillaSection from './Sumilla/SumillaSection';
 import Sumilla from './Sumilla/Sumilla';
 import CustomModal from '../utils/CustomModal';
 import EstrategiaD from './EstrategiaD'; 
-import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
+import LogrosSection from './LogrosSection'; // Importamos LogrosSection
 import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -19,6 +18,8 @@ export default function Formulario() {
     const [cursoData, setCursoData] = useState(null); // Estado para almacenar los datos del curso
     const [errorMessage, setErrorMessage] = useState(null); // Estado para el mensaje de error
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
+    const [logros, setLogros] = useState([]);
+
 
     const handleModalClose = () => setIsModalOpen(false);
 
@@ -27,6 +28,14 @@ export default function Formulario() {
             setIsModalOpen(true); // Abre el modal cuando hay un mensaje de error
         }
     }, [errorMessage]);
+
+    useEffect(() => {
+        if (cursoData && cursoData.competencias) {
+            // Extrae logros de todas las competencias en un solo arreglo
+            const extractedLogros = cursoData.competencias.flatMap(comp => comp.logros || []);
+            setLogros(extractedLogros);
+        }
+    }, [cursoData]);
 
     const [expanded, setExpanded] = useState({
         informacionGeneral: false,
@@ -46,14 +55,6 @@ export default function Formulario() {
         }));
     };
 
-    const [competencias, setCompetencias] = useState([
-        { codigo: 'CT7.1', descripcion: 'Descripción de la competencia 1', tipo: 'Técnico', nivel: 'Básico' },
-        { codigo: 'CT8.3', descripcion: 'Descripción de la competencia 2', tipo: 'Técnico', nivel: 'Intermedio' }
-    ]);
-    const [logros, setLogros] = useState([
-        { logro: 'Logro 1', codigo: 'L1', descripcion: 'Descripción del logro 1' },
-        { logro: 'Logro 2', codigo: 'L2', descripcion: 'Descripción del logro 2' }
-    ]);
     const [capacidades, setCapacidades] = useState([
         { capacidad: 'Capacidad 1', descripcion: 'Descripción de la capacidad 1' },
         { capacidad: 'Capacidad 2', descripcion: 'Descripción de la capacidad 2' }
@@ -110,81 +111,27 @@ export default function Formulario() {
                 expanded={expanded.sumilla}
                 toggleExpand={() => toggleExpand('sumilla')}
             >
-                <Sumilla />
-            </CollapsibleSection>
+                <Sumilla value={cursoData?.sumilla || ''} /> {/* Pasamos la sumilla aquí */}
+                </CollapsibleSection>
 
             <CollapsibleSection
                 title="Competencias del Perfil de Egreso"
                 expanded={expanded.competencias}
                 toggleExpand={() => toggleExpand('competencias')}
             >
-            <CompetenciasSection
-              competencias={cursoData?.competencias || []}
-              setCompetencias={() => {}}
-            />
+                <CompetenciasSection
+                    competencias={cursoData?.competencias || []}
+                    setCompetencias={() => {}}
+                />
             </CollapsibleSection>
 
-            {/* Sección Logros de Aprendizaje */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Logros de Aprendizaje</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('logros')}>
-                        {expanded.logros ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.logros && (
-                    <div className="cuerpo">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Logro</th>
-                                    <th>Código</th>
-                                    <th>Descripción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {logros.map((logro, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={logro.logro}
-                                                onChange={(e) => {
-                                                    const newLogros = [...logros];
-                                                    newLogros[index].logro = e.target.value;
-                                                    setLogros(newLogros);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={logro.codigo}
-                                                onChange={(e) => {
-                                                    const newLogros = [...logros];
-                                                    newLogros[index].codigo = e.target.value;
-                                                    setLogros(newLogros);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={logro.descripcion}
-                                                onChange={(e) => {
-                                                    const newLogros = [...logros];
-                                                    newLogros[index].descripcion = e.target.value;
-                                                    setLogros(newLogros);
-                                                }}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </section>
+            <CollapsibleSection
+                title="Logros de Aprendizaje"
+                expanded={expanded.logros}
+                toggleExpand={() => toggleExpand('logros')}
+            >
+                <LogrosSection competencias={cursoData?.competencias || []} />
+            </CollapsibleSection>
 
             {/* Sección Capacidades */}
             <section className="fondo unidad">
