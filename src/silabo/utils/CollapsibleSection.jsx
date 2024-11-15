@@ -1,21 +1,37 @@
-// src/components/CollapsibleSection.js
+// src/utils/CollapsibleSection.js
 import React from 'react';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const CollapsibleSection = ({ title, expanded, toggleExpand, children }) => (
-    <section className="fondo unidad">
-        {/* Aplica el onClick a toda la sección de .display */}
-        <div className="display" onClick={toggleExpand}>
-            <h2>{title}</h2>
-            {/* IconButton para visualización del ícono */}
+    <section
+        style={{
+            margin: '10px auto',
+            padding: '10px',
+            borderRadius: '12px',
+            backgroundColor: 'rgba(113, 56, 77, 0.3)', // Fondo más suave para unificar diseño
+            width: '85%',
+        }}
+    >
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                cursor: 'pointer',
+            }}
+            onClick={toggleExpand}
+        >
+            <Typography variant="h6" sx={{ color: '#4a148c', fontWeight: 'bold' }}>
+                {title}
+            </Typography>
             <IconButton color="action">
                 {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
         </div>
         {expanded && (
-            <div className="cuerpo">
+            <div style={{ marginTop: '10px' }}>
                 {children}
             </div>
         )}

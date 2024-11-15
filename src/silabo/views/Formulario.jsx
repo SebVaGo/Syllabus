@@ -64,22 +64,20 @@ export default function Formulario() {
             [section]: !prevState[section]
         }));
     };
+    const handleSumillaChange = (newSumilla) => {
+        setCursoData(prevData => ({
+            ...prevData,
+            sumilla: newSumilla
+        }));
+    };
+    const handleCompetenciasChange = (newCompetencias) => {
+        setCursoData(prevData => ({
+            ...prevData,
+            competencias: newCompetencias
+        }));
+    };
 
-    const [capacidades, setCapacidades] = useState([
-        { capacidad: 'Capacidad 1', descripcion: 'Descripción de la capacidad 1' },
-        { capacidad: 'Capacidad 2', descripcion: 'Descripción de la capacidad 2' }
-    ]);
-    const [programacion, setProgramacion] = useState([
-        { unidad: 'Unidad 1', contenidos: 'Contenido de Unidad 1' },
-        { unidad: 'Unidad 2', contenidos: 'Contenido de Unidad 2' }
-    ]);
-    const [estrategiaDidactica, setEstrategiaDidactica] = useState('');
-    const [evaluacion, setEvaluacion] = useState([
-        { resultado: 'RA1', noLogrado: '', suficiente: '', notable: '', sobresaliente: '' }
-    ]);
-
-
-        return (
+return (
 <div className="formulario">
     {/* Modal para mensajes de error */}
     <CustomModal 
@@ -121,7 +119,7 @@ export default function Formulario() {
                 expanded={expanded.sumilla}
                 toggleExpand={() => toggleExpand('sumilla')}
             >
-                <Sumilla value={cursoData?.sumilla || ''} /> {/* Pasamos la sumilla aquí */}
+                    <Sumilla value={cursoData?.sumilla || ''} setValue={handleSumillaChange} />
                 </CollapsibleSection>
 
             <CollapsibleSection
@@ -130,9 +128,9 @@ export default function Formulario() {
                 toggleExpand={() => toggleExpand('competencias')}
             >
                 <CompetenciasSection
-                    competencias={cursoData?.competencias || []}
-                    setCompetencias={() => {}}
-                />
+                    competencias={cursoData?.competencias || []} 
+                    setCompetencias={handleCompetenciasChange} // Cambiar setValue por setCompetencias
+                    />
             </CollapsibleSection>
 
             <CollapsibleSection
@@ -140,7 +138,7 @@ export default function Formulario() {
                 expanded={expanded.logros}
                 toggleExpand={() => toggleExpand('logros')}
             >
-                <LogrosSection competencias={cursoData?.competencias || []} />
+                <LogrosSection competencias={cursoData?.competencias || []}  setLogros={setLogros}/>
             </CollapsibleSection>
 
             <CollapsibleSection

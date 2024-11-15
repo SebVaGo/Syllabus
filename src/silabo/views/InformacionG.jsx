@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Grid, TextField, Button, Paper, Typography, Stack } from '@mui/material';
-import { Restore, Save } from '@mui/icons-material';
+import { Grid, TextField } from '@mui/material';
+import SectionContainer from '../utils/SectionContainer';
+import ActionButtons from '../utils/ActionButtons';
 
 // Componente reutilizable para cada campo de información
 const InfoField = ({ id, label, value, onChange }) => (
@@ -16,9 +17,9 @@ const InfoField = ({ id, label, value, onChange }) => (
       mb: 1,
       backgroundColor: 'white',
       width: '100%',
-      borderRadius: '8px',
+      borderRadius: '6px',
       '& .MuiFilledInput-root': {
-        borderRadius: '8px',
+        borderRadius: '6px',
       },
     }}
   />
@@ -41,23 +42,19 @@ const InformacionG = ({
 
   const handleReset = () => setCursoData(initialData);
 
+  const handleSave = () => {
+    console.log('Guardar cambios:', cursoData);
+    // Aquí puedes añadir la lógica para guardar los cambios en el curso
+  };
+
+  const handleAdd = () => {
+    console.log('Agregar nuevo campo o funcionalidad');
+    // Añadir funcionalidad para "Agregar" si se necesita en el contexto de InformacionG
+  };
+
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        padding: '20px',
-        borderRadius: '20px',
-        backgroundColor: 'rgba(113, 56, 77, 0.1)',
-        width: '90%',
-        margin: '20px auto',
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <Typography variant="h6" sx={{ color: '#4a148c', fontWeight: 'bold', mb: 2 }}>
-        Información General del Curso
-      </Typography>
-      
-      <Grid container spacing={2}>
+    <SectionContainer title="" sx={{ padding: '15px' }}>
+      <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={4}>
           <InfoField id="codigo" label="Código" value={cursoData.codigo} onChange={handleChange} />
           <InfoField id="nombre" label="Nombre" value={cursoData.nombre} onChange={handleChange} />
@@ -79,42 +76,9 @@ const InformacionG = ({
         </Grid>
       </Grid>
 
-      <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 3 }}>
-        <Button
-          onClick={handleReset}
-          startIcon={<Restore />}
-          sx={{
-            borderRadius: '10px',
-            backgroundColor: '#d32f2f',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            padding: '6px 12px',
-            '&:hover': { backgroundColor: '#b71c1c' },
-          }}
-          variant="contained"
-        >
-          Restablecer
-        </Button>
-        
-        <Button
-          onClick={() => console.log('Guardar cambios:', cursoData)}
-          startIcon={<Save />}
-          sx={{
-            borderRadius: '10px',
-            backgroundColor: '#4a148c',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            padding: '6px 12px',
-            '&:hover': { backgroundColor: '#380d5d' },
-          }}
-          variant="contained"
-        >
-          Guardar
-        </Button>
-      </Stack>
-    </Paper>
+      {/* Uso del componente ActionButtons */}
+      <ActionButtons onAdd={handleAdd} onReset={handleReset} onSave={handleSave} />
+    </SectionContainer>
   );
 };
 
