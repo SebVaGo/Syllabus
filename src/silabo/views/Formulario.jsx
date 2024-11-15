@@ -7,6 +7,8 @@ import CustomModal from '../utils/CustomModal';
 import EstrategiaD from './EstrategiaD'; 
 import "react-quill/dist/quill.snow.css";
 import LogrosSection from './LogrosSection'; // Importamos LogrosSection
+import CapacidadesSection from './CapacidadesSection'; // Importa CapacidadesSection
+import ProgramacionContenidoSection from './ProgramacionContenidoSection'; // Importamos el nuevo componente
 import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -19,9 +21,17 @@ export default function Formulario() {
     const [errorMessage, setErrorMessage] = useState(null); // Estado para el mensaje de error
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal
     const [logros, setLogros] = useState([]);
+    const [unidades, setUnidades] = useState([]);
+
 
 
     const handleModalClose = () => setIsModalOpen(false);
+
+    useEffect(() => {
+        if (cursoData && cursoData.unidades) {
+            setUnidades(cursoData.unidades);
+        }
+    }, [cursoData]);
 
     useEffect(() => {
         if (errorMessage) {
@@ -133,105 +143,23 @@ export default function Formulario() {
                 <LogrosSection competencias={cursoData?.competencias || []} />
             </CollapsibleSection>
 
-            {/* Sección Capacidades */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Capacidades</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('capacidades')}>
-                        {expanded.capacidades ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.capacidades && (
-                    <div className="cuerpo">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Capacidad</th>
-                                    <th>Descripción</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {capacidades.map((capacidad, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={capacidad.capacidad}
-                                                onChange={(e) => {
-                                                    const newCapacidades = [...capacidades];
-                                                    newCapacidades[index].capacidad = e.target.value;
-                                                    setCapacidades(newCapacidades);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={capacidad.descripcion}
-                                                onChange={(e) => {
-                                                    const newCapacidades = [...capacidades];
-                                                    newCapacidades[index].descripcion = e.target.value;
-                                                    setCapacidades(newCapacidades);
-                                                }}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </section>
+            <CollapsibleSection
+                title="Capacidades (Logros por Unidad)"
+                expanded={expanded.capacidades}
+                toggleExpand={() => toggleExpand('capacidades')}
+            >
+                <CapacidadesSection unidades={cursoData?.unidades || []} /> {/* Usamos cursoData.unidades */}
+            </CollapsibleSection>
 
-            {/* Sección Programación de Contenido */}
-            <section className="fondo unidad">
-                <div className="display">
-                    <h2>Programación de Contenido</h2>
-                    <IconButton color="action" onClick={() => toggleExpand('programacion')}>
-                        {expanded.programacion ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                </div>
-                {expanded.programacion && (
-                    <div className="cuerpo">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Unidad</th>
-                                    <th>Contenidos</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {programacion.map((unidad, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={unidad.unidad}
-                                                onChange={(e) => {
-                                                    const newProgramacion = [...programacion];
-                                                    newProgramacion[index].unidad = e.target.value;
-                                                    setProgramacion(newProgramacion);
-                                                }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                value={unidad.contenidos}
-                                                onChange={(e) => {
-                                                    const newProgramacion = [...programacion];
-                                                    newProgramacion[index].contenidos = e.target.value;
-                                                    setProgramacion(newProgramacion);
-                                                }}
-                                            />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-            </section>
+            <CollapsibleSection
+                title="Programación de Contenido"
+                expanded={expanded.programacion}
+                toggleExpand={() => toggleExpand('programacion')}
+            >
+                <ProgramacionContenidoSection 
+                    unidades={cursoData?.unidades || []} 
+                />
+            </CollapsibleSection>
 
             {/* Sección Estrategia Didáctica */}
             <section className="fondo unidad">

@@ -1,45 +1,67 @@
 import React from 'react';
-import '../../styles/Formulario.css';
-import '../../styles/Sumilla.css';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { TextareaAutosize, Button, Stack, Paper, Typography, IconButton } from '@mui/material';
+import { Restore, Edit } from '@mui/icons-material';
 
-const modules = {
-  toolbar: [
-    [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{ 'color': [] }, { 'background': [] }],
-    [{ 'align': [] }],
-    ['clean'],
-  ],
-};
+const Sumilla = ({ value, setValue }) => {
+  const [originalValue] = React.useState(value);
 
-const formats = [
-  'header', 'font', 'size',
-  'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet',
-  'color', 'background',
-  'align',
-];
+  const handleReset = () => setValue(originalValue);
 
-const Sumilla = ({ value }) => {
   return (
-    <div className="quill-container">
-      <ReactQuill
-        modules={modules}
-        formats={formats}
-        value={value} // Muestra el valor de la sumilla recibido como prop
-        readOnly={true} // Establece el modo solo lectura, puedes cambiar esto si deseas edición
+    <Paper
+      elevation={3}
+      sx={{
+        padding: '20px',
+        borderRadius: '20px',
+        backgroundColor: 'rgba(113, 56, 77, 0.1)', // Fondo más suave
+        width: '90%',
+        margin: 'auto',
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Sombra suave para darle profundidad
+      }}
+    >
+      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+
+      </Stack>
+      <TextareaAutosize
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Escribe aquí la sumilla del curso..."
+        minRows={5}
+        maxRows={10}
         style={{
-          backgroundColor: 'white',
           width: '100%',
-          minHeight: '150px',
+          padding: '15px',
+          fontSize: '16px',
+          fontFamily: 'Arial, sans-serif',
+          lineHeight: '1.5',
           borderRadius: '10px',
+          border: '1px solid #ddd',
+          backgroundColor: '#ffffff',
+          resize: 'none',
+          boxSizing: 'border-box',
+          boxShadow: 'inset 0px 2px 4px rgba(0, 0, 0, 0.1)', // Sombra interna para profundidad
         }}
       />
-    </div>
+      <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
+        <Button
+          startIcon={<Restore />}
+          onClick={handleReset}
+          sx={{
+            borderRadius: '10px',
+            backgroundColor: '#d32f2f',
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            padding: '8px 16px',
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Sombra para resaltar el botón
+            '&:hover': { backgroundColor: '#b71c1c' },
+          }}
+          variant="contained"
+        >
+          Restablecer Sumilla
+        </Button>
+      </Stack>
+    </Paper>
   );
 };
 
