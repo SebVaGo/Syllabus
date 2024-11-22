@@ -1,20 +1,36 @@
-// cursoSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { actualizarCurso } from '../actions/CargaDetalleCursoThunk';
+
+const initialState = {
+  curso: null, // Información del curso actual
+  loading: false,
+  error: null,
+};
 
 const cursoSlice = createSlice({
   name: 'curso',
-  initialState: {
-    sumilla: '',
-    // otros campos del curso
-  },
+  initialState,
   reducers: {
-    setSumilla: (state, action) => {
-      state.sumilla = action.payload;
+    setCurso(state, action) {
+      state.curso = action.payload;
     },
-    // otros reducers
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(actualizarCurso.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(actualizarCurso.fulfilled, (state, action) => {
+        state.loading = false;
+        state.curso = { ...state.curso, ...action.payload }; // Actualiza solo los campos que cambiaron
+      })
+      .addCase(actualizarCurso.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { setSumilla } = cursoSlice.actions;
-
+export const { setCurso } = cursoSlice.actions;
 export default cursoSlice.reducer;

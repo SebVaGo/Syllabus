@@ -49,7 +49,6 @@ export const performLogout = () => async (dispatch) => {
     dispatch(logoutUser());
     dispatch(clearError()); // Limpia cualquier error anterior
     dispatch(clearData()); // Limpia los datos del curso al cerrar sesión
-    navigate('/silabo/login'); 
 
 
   } catch (error) {

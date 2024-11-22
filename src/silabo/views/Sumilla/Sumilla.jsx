@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import { useSelector, useDispatch } from 'react-redux';
 import { TextareaAutosize, Button, Stack, Typography } from '@mui/material';
 import { Restore, Save } from '@mui/icons-material';
@@ -28,6 +29,26 @@ const Sumilla = () => {
 
   return (
     <SectionContainer>
+=======
+import { useSelector } from 'react-redux';
+import { TextareaAutosize, Button, Stack } from '@mui/material';
+
+const Sumilla = () => {
+  const sumilla = useSelector((state) => state.cargarDetallesCurso.curso.sumilla);
+  const [tempValue, setTempValue] = React.useState(sumilla || '');
+
+  React.useEffect(() => {
+    setTempValue(sumilla || '');
+  }, [sumilla]);
+
+  const handleSave = () => {
+    console.log('Guardar sumilla:', tempValue);
+  };
+
+  return (
+    <div>
+      <h3>Sumilla del Curso</h3>
+>>>>>>> 6195f9d (Sumilla con redux Ok, falta editar)
       <TextareaAutosize
         value={tempValue}
         onChange={(e) => setTempValue(e.target.value)}
@@ -38,54 +59,21 @@ const Sumilla = () => {
           width: '100%',
           padding: '10px',
           fontSize: '15px',
-          fontFamily: 'Arial, sans-serif',
-          lineHeight: '1.5',
           borderRadius: '6px',
           border: '1px solid #ccc',
-          backgroundColor: '#ffffff',
-          resize: 'none',
-          boxSizing: 'border-box',
-          boxShadow: 'inset 0px 2px 4px rgba(0, 0, 0, 0.1)', // Sombra interna para profundidad
         }}
       />
-      
       <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{ mt: 2 }}>
         <Button
-          startIcon={<Restore />}
-          onClick={handleReset}
-          sx={{
-            borderRadius: '8px',
-            backgroundColor: '#c62828',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '13px',
-            padding: '6px 12px',
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Sombra para resaltar el botón
-            '&:hover': { backgroundColor: '#b71c1c' },
-          }}
           variant="contained"
-        >
-          Restablecer
-        </Button>
-        <Button
-          startIcon={<Save />}
+          color="primary"
           onClick={handleSave}
-          sx={{
-            borderRadius: '8px',
-            backgroundColor: '#6a1b9a',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '13px',
-            padding: '6px 12px',
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Sombra para resaltar el botón
-            '&:hover': { backgroundColor: '#4a148c' },
-          }}
-          variant="contained"
+          sx={{ borderRadius: '8px' }}
         >
           Guardar
         </Button>
       </Stack>
-    </SectionContainer>
+    </div>
   );
 };
 
