@@ -1,26 +1,36 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import SectionContainer from '../utils/SectionContainer';
 import StyledTableContainer from '../utils/StyledTableContainer';
 import ActionButtons from '../utils/ActionButtons';
+import { addUnidad, resetUnidades } from '../slices/formDataSlice'; // Acciones desde el slice
 
-const ProgramacionContenidoTable = ({ unidades, setUnidades, originalUnidades }) => {
+const ProgramacionContenidoTable = () => {
+  const dispatch = useDispatch();
+
+  // Obtener las unidades desde el estado global
+  const unidades = useSelector((state) => state.formData.data?.unidades || []);
+
+  // Manejar la adición de una nueva unidad
   const handleAdd = () => {
     const newUnidad = { numero: '', contenidos: [] };
-    setUnidades([...unidades, newUnidad]);
+    dispatch(addUnidad(newUnidad)); // Agrega una nueva unidad
   };
 
+  // Restablecer las unidades al estado inicial
   const handleReset = () => {
-    setUnidades(originalUnidades);
+    dispatch(resetUnidades()); // Resetea las unidades desde el estado inicial
   };
 
+  // Guardar cambios (puedes conectar esto con el backend)
   const handleSave = () => {
-    console.log("Guardar cambios:", unidades);
-    // Aquí puedes agregar la lógica de guardado
+    console.log('Unidades guardadas:', unidades);
+    // Implementa aquí la lógica para guardar los datos en el backend si es necesario
   };
 
   return (
-    <SectionContainer title="" sx={{ padding: '20px' }}>
+    <SectionContainer title="Programación de Contenido" sx={{ padding: '20px' }}>
       <StyledTableContainer>
         <Table>
           <TableHead>
@@ -89,12 +99,8 @@ const ProgramacionContenidoTable = ({ unidades, setUnidades, originalUnidades })
         </Table>
       </StyledTableContainer>
 
-      {/* Uso de ActionButtons con las funciones correspondientes */}
-      <ActionButtons
-        onAdd={handleAdd}
-        onReset={handleReset}
-        onSave={handleSave}
-      />
+      {/* Botones de acción */}
+      <ActionButtons onAdd={handleAdd} onReset={handleReset} onSave={handleSave} />
     </SectionContainer>
   );
 };

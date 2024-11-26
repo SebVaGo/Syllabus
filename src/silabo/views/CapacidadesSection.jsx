@@ -1,28 +1,41 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Table, TableBody, TableCell, TableHead, TableRow, TextField, IconButton } from '@mui/material';
-import { Add } from '@mui/icons-material';
 import SectionContainer from '../utils/SectionContainer';
 import StyledTableContainer from '../utils/StyledTableContainer';
 import ActionButtons from '../utils/ActionButtons';
+import {
+  addUnidad,
+  updateUnidad,
+  resetUnidades,
+} from '../slices/formDataSlice'; // Acciones de Redux
 
-const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
+const CapacidadesSection = () => {
+  const dispatch = useDispatch();
+
+  // Obtener unidades directamente desde Redux
+  const unidades = useSelector((state) => state.formData.data?.unidades || []);
+
+  // Manejar la adición de una nueva unidad
   const handleAdd = () => {
-    setUnidades([...unidades, { numero: '', duracion: '', descripcion: '', nueva: true }]);
+    const nuevaUnidad = { numero: '', duracion: '', descripcion: '', nueva: true };
+    dispatch(addUnidad(nuevaUnidad)); // Despacha acción para agregar una unidad
   };
 
-  const handleReset = () => {
-    setUnidades(originalUnidades); // Restablece las unidades a los datos originales
-  };
-
+  // Manejar los cambios en una unidad
   const handleChange = (index, field, value) => {
-    const updated = [...unidades];
-    updated[index][field] = value;
-    setUnidades(updated);
+    dispatch(updateUnidad({ index, field, value })); // Despacha acción para actualizar la unidad
   };
 
+  // Restablecer las unidades al estado original
+  const handleReset = () => {
+    dispatch(resetUnidades()); // Despacha acción para restablecer las unidades
+  };
+
+  // Guardar los cambios (aquí puedes conectar con el backend si es necesario)
   const handleSave = () => {
-    console.log("Guardar cambios:", unidades);
-    // Agrega aquí la lógica para guardar los datos
+    console.log('Guardar cambios:', unidades);
+    // Implementa aquí la lógica para guardar los datos en el backend
   };
 
   const textFieldStyles = {
@@ -34,23 +47,28 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
   };
 
   return (
-    <SectionContainer title="">
+    <SectionContainer title="Capacidades por Unidad">
       <StyledTableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a148c', fontSize: '1rem', backgroundColor: '#e1bee7', borderBottom: '2px solid #ba68c8', padding: '12px', width: '15%' }}>
-                Número de Unidad
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a148c', fontSize: '1rem', backgroundColor: '#e1bee7', borderBottom: '2px solid #ba68c8', padding: '12px', width: '15%' }}>
-                Duración (Semanas)
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a148c', fontSize: '1rem', backgroundColor: '#e1bee7', borderBottom: '2px solid #ba68c8', padding: '12px', width: '55%' }}>
-                Logro
-              </TableCell>
-              <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a148c', fontSize: '1rem', backgroundColor: '#e1bee7', borderBottom: '2px solid #ba68c8', padding: '12px' }}>
-                Acciones
-              </TableCell>
+              {['Número de Unidad', 'Duración (Semanas)', 'Logro', 'Acciones'].map((head, index) => (
+                <TableCell
+                  key={index}
+                  align="center"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: '#4a148c',
+                    fontSize: '1rem',
+                    backgroundColor: '#e1bee7',
+                    borderBottom: '2px solid #ba68c8',
+                    padding: '12px',
+                    width: index === 2 ? '55%' : '15%',
+                  }}
+                >
+                  {head}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -60,7 +78,7 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
                   <TextField
                     variant="outlined"
                     size="small"
-                    value={unidad.numero}
+                    value={unidad.numero || ''}
                     onChange={(e) => handleChange(index, 'numero', e.target.value)}
                     fullWidth
                     sx={textFieldStyles}
@@ -70,7 +88,7 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
                   <TextField
                     variant="outlined"
                     size="small"
-                    value={unidad.duracion}
+                    value={unidad.duracion || ''}
                     onChange={(e) => handleChange(index, 'duracion', e.target.value)}
                     fullWidth
                     sx={textFieldStyles}
@@ -80,7 +98,7 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
                   <TextField
                     variant="outlined"
                     size="small"
-                    value={unidad.descripcion}
+                    value={unidad.descripcion || ''}
                     onChange={(e) => handleChange(index, 'descripcion', e.target.value)}
                     fullWidth
                     multiline
@@ -89,7 +107,7 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
                   />
                 </TableCell>
                 <TableCell align="center">
-                  {/* Botón de eliminación si se requiere en el futuro */}
+                  {/* Espacio para acciones adicionales si es necesario */}
                 </TableCell>
               </TableRow>
             ))}
@@ -97,12 +115,8 @@ const CapacidadesSection = ({ unidades, setUnidades, originalUnidades }) => {
         </Table>
       </StyledTableContainer>
 
-      {/* Uso de ActionButtons con las funciones correspondientes */}
-      <ActionButtons
-        onAdd={handleAdd}
-        onReset={handleReset}
-        onSave={handleSave}
-      />
+      {/* Botones de acción */}
+      <ActionButtons onAdd={handleAdd} onReset={handleReset} onSave={handleSave} />
     </SectionContainer>
   );
 };

@@ -1,17 +1,33 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { TextareaAutosize, Button, Stack, Typography } from '@mui/material';
 import { Restore, Save } from '@mui/icons-material';
 import SectionContainer from '../../utils/SectionContainer';
+import { setFormData } from '../../slices/formDataSlice';
 
-const Sumilla = ({ value, setValue }) => {
-  const [tempValue, setTempValue] = React.useState(value);
-  const [originalValue] = React.useState(value);
+const Sumilla = () => {
+  const dispatch = useDispatch();
+  const sumilla = useSelector((state) => state.formData.data?.sumilla || ''); // Obtiene la sumilla del estado global
+  const [tempValue, setTempValue] = React.useState(sumilla); // Estado temporal para edición
+  const originalValue = useSelector((state) => state.formData.initialData?.sumilla || ''); // Valor original para restablecer
 
-  const handleReset = () => setTempValue(originalValue);
-  const handleSave = () => setValue(tempValue);
+  // Restablecer al valor original
+  const handleReset = () => {
+    setTempValue(originalValue);
+  };
+
+  // Guardar el valor en el estado global
+  const handleSave = () => {
+    dispatch(
+      setFormData({
+        ...useSelector((state) => state.formData.data),
+        sumilla: tempValue, // Actualiza solo la sumilla
+      })
+    );
+  };
 
   return (
-    <SectionContainer title="">
+    <SectionContainer>
       <TextareaAutosize
         value={tempValue}
         onChange={(e) => setTempValue(e.target.value)}

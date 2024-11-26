@@ -5,6 +5,7 @@ import authSliceSilabo from '../../silabo/slices/userAuthSlice';
 import cursoSlice from '../../cursos/slices/cursoSlice';
 import silaboSlice from '../../silabo/slices/silaboSlice';
 import cargarDetallesCursoSlice from '../../silabo/slices/cargarDetallesCursoSlice';
+import formDataSlice from '../../silabo/slices/formDataSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     curso: cursoSlice,
     silabo: silaboSlice,
     cargarDetallesCurso: cargarDetallesCursoSlice,
+    formData: formDataSlice,
   },
 });
 
